@@ -1,0 +1,114 @@
+####
+####   This is source file for WriteTarget generator.
+####   See http://exoprog.110mb.com/wt for the program.
+####
+
+make_var () {    
+     VAR="$1"
+     DEF="${2:-0}"    
+         
+     appends   OP_VARIABLES     $LETTER    "int $VAR=$DEF;"
+     appends   OP_VAR_DECL      $LETTER    "extern    int $VAR;"
+}
+
+comment () {
+    echo '/* This file was generated with WriteTarget ' $WT_VERSION
+    echo ' * from ' $(input)
+    echo ' * See ' $WT_WEB  for details
+    echo ' **********/'    
+}
+
+def_option () {
+    LETTER="$1"
+    VAR="$2"
+    HELP="$3"
+
+    appends   -n     OP_LETTERS    $LETTER     $LETTER
+    appends          OP_CODE       $LETTER     "  case '"$LETTER"':
+       $VAR = 1;
+       break;"
+
+
+    appends   OP_HELP          $LETTER    '"'"     -$LETTER      - "$HELP'\n"'
+    make_var  $VAR
+}
+
+def_param () {
+    LETTER="$1"
+    VAR="$2"
+    HELP="$3"
+    DEFAULT="$4"
+
+    appends   -n     OP_LETTERS    $LETTER     $LETTER':'
+    appends          OP_CODE       $LETTER     "  case '"$LETTER"':
+       $VAR = atoi( optarg );
+       break;"
+
+    make_var  $VAR  $DEFAULT
+
+    appends   OP_HELP          $LETTER    '"'"     -$LETTER N    - "$HELP'\n"'
+}
+
+appends      OP_HELP    h  '"     -h      - show this help\n"'
+appends   -n OP_LETTERS h h
+
+def_option  s  op_s    "step program"
+def_param   b  op_b    "begin of dump after N steps"                0
+def_param   e  op_e    "end dump after N steps"               9999999    
+def_param   x  op_x    "exit program after N steps"                 
+def_param   t  op_t    "expand TAB to N spaces"
+def_param   w  op_w    "dump margin (width/2)"                     26
+def_param   l  op_l    "dump lines (height/2)"                      8
+def_param   n  op_n    "dump initial data as numerical table"
+
+cat <<END_OF_FILE
+$(comment)
+#include "sysdefs.h"
+
+$(target OP_VARIABLES)
+
+extern const char *prog_name, *prog_version;    
+    
+void help( void )
+{
+    printf( "%s %s\n", prog_name, prog_version );
+    printf( "Usage:  %s [options] file\n"
+            "Options:\n"
+    $(target OP_HELP)
+            "\n", prog_name );     
+}
+    
+void parse_op( int argc, char *argv[] )
+{
+    int op;
+
+    op = 0;
+    while ( op >= 0 ) {
+        op = getopt( argc, argv, "$(target OP_LETTERS)" );
+        switch ( op ) {
+            case -1:
+                break;
+            case 'h':
+                help();
+                exit( 0 );
+                
+$(target OP_CODE)  
+    
+            default:
+                exit( 1 );
+        }
+    }
+}
+
+END_OF_FILE
+
+
+cat <<END_OF_FILE > blak.h
+$(comment)
+#ifndef   __blak_h_
+#define   __blak_h_
+
+$(target  OP_VAR_DECL)
+
+#endif
+END_OF_FILE

@@ -1,0 +1,49 @@
+  BLAK 1.0     - http://exoprog.110mb.com
+-------------------------------------------
+
+  This is an interpreter for BLACK programming language.
+  It is distributed under the terms of GNU GPL license, without
+  ANY WARRANTY - see COPYING file.  
+  
+  I wrote this interpreter as a research tool.
+  
+  The Black is a two-dimensional esoteric programming language 
+  created in 2006 by ais523.  See BLACK entry in Esoteric Language WIKI 
+  (http://esolangs.org/wiki/Black) for detailed definition.
+ 
+  The interpreter reads Black program from the file and interpretes it.
+  The "arena" is large, but not infinite - it is limited by sizeof int
+  verticaly and horizontaly. Fill free to change it to "long long" 
+  and recompile. Number of filled cells is limited by your memory.
+ 
+  BLAK interpreter has following features:
+  1) The pointer characters (v, >, < or ^) can be used in source file
+     to indicate starting point of the program other than standard.
+  2) The TAB characters in source are treated as error, unless you
+     give -t option
+  3) Some command line options supporting debugging
+  4) Numerical data dump
+  5) Printing extensions (digits print themselves, N breaks line) 
+  6) Memory is allocated only while reading the file - in runtime
+     the interpreter maintains list of cells and does not allocate
+     sigle byte of core.
+    
+  The debugging options are on, so if you want to run larger program
+  and see the result, turn them off - use something like this:
+
+       $> ./blak -e0 counters.n
+
+  and you should see this:
+
+  11111111111111111111111111
+  111111111111111111111111111
+  1111111111111111111111111111
+  11111111111111111111111111111
+
+  filling slower and slower your console ...
+
+     
+  The *.n files are some Black examples.  I call them *.n because 
+  the first version of the program was called "noir".
+
+

@@ -1,5 +1,5 @@
 
-CFLAGS=-g -Wall
+CFLAGS=-g -O2 -Wall -Wextra -Wno-implicit-fallthrough
 LDFLAGS=
 LOADLIBES=
 PROGFILES=blak

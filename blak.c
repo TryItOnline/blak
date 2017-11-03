@@ -297,7 +297,7 @@ void dump_all_data( void )
 
 int main( int argc, char *argv[] )
 {
-    int ndx;
+    int ndx = 0;
     
     parse_op( argc, argv );
     

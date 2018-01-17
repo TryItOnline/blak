@@ -9,12 +9,12 @@ WT_WORK_DIR=./wt_work.tmp
 
 all:$(PROGFILES)
 
-par_op.c:par_op.wt
-	$(WT) -d$(WT_WORK_DIR) -s c $< 
+#par_op.c:par_op.wt
+#	$(WT) -d$(WT_WORK_DIR) -s c $<
 
-blak.h:par_op.wt
-	$(WT) -d$(WT_WORK_DIR) -s c $<
-	
+#blak.h:par_op.wt
+#	$(WT) -d$(WT_WORK_DIR) -s c $<
+
 blak_OFILES=blak.o par_op.o
 
 %.o:%.c
